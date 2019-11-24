@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Implementing HTTP/2 with mbed TLS</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Robby Simpson" />
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Implementing HTTP/2 with mbed TLS | Robby Simpson</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Implementing HTTP/2 with mbed TLS" />
+<meta name="author" content="robby" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I’ve recently been exploring mbed TLS and thought I’d share some numbers I’ve found." />
+<meta property="og:description" content="I’ve recently been exploring mbed TLS and thought I’d share some numbers I’ve found." />
+<link rel="canonical" href="/2015/05/14/implementing-http2-with-mbed-tls.html" />
+<meta property="og:url" content="/2015/05/14/implementing-http2-with-mbed-tls.html" />
+<meta property="og:site_name" content="Robby Simpson" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-05-14T00:00:00-04:00" />
+<script type="application/ld+json">
+{"description":"I’ve recently been exploring mbed TLS and thought I’d share some numbers I’ve found.","mainEntityOfPage":{"@type":"WebPage","@id":"/2015/05/14/implementing-http2-with-mbed-tls.html"},"@type":"BlogPosting","url":"/2015/05/14/implementing-http2-with-mbed-tls.html","headline":"Implementing HTTP/2 with mbed TLS","dateModified":"2015-05-14T00:00:00-04:00","datePublished":"2015-05-14T00:00:00-04:00","author":{"@type":"Person","name":"robby"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <!-- <body class="home blog single-author two-column right-sidebar"> -->
+  <body class="home blog single-author">
+    <div id="page" class="hfeed">
+    <header id="branding" role="banner">
+    <hgroup>
+      <h1 id="site-title"><span><a href="/" rel="home">Robby Simpson</a></span></h1>
+      <h2 id="site-description">My Musings, Rants, and Sometimes Useful Information</h2>
+    </hgroup>
+    
+    <a href="/"><img src="/assets/images/cropped-Atlanta-Skyline.jpg" alt="Robby Simpson" width="1000" height="287"></a>
+    
+    <nav id="access" role="navigation">
+  <div>
+  <ul id="menu-menu-1" class="menu">
+  
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href="/">home</a></li>
+  
+    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/publications.html">publications</a></li>
+  
+    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/presentations.html">presentations</a></li>
+  
+    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about.html">about me</a></li>
+  
+    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/deuterium.html">Deuterium</a></li>
+  
+  </ul>
+  </div>
+</nav>
+
+    </header>
+    <div id="main">
+    <div id="primary">
+    <div id="content" role="main">
+    <article class="post type-post status-publish format-standard hentry">
+<header class="entry-header">
+<h1 class="entry-title">Implementing HTTP/2 with mbed TLS</h1>
+<div class="entry-meta">
+<span class="sep">Posted on </span><time class="entry-date">14 May 2015</time>
+</div><!-- .entry-meta -->
+</header><!-- .entry-header -->
+
+<div class="entry-content">
+<p>I’ve <a href="/deuterium">recently been exploring</a> <a href="https://mbed.org/technology/mbed-tls/">mbed TLS</a> and thought I’d share some numbers I’ve found.</p>
+
+<p>First, the specifics:</p>
+
+<ul>
+  <li>mbed TLS version: 1.3.10</li>
+  <li>Compiler: arm-none-eabi-gcc (GNU Tools for ARM Embedded Processors) 4.9.3 20141119 (release) [ARM/embedded-4_9-branch revision 218278]</li>
+  <li>Processor: <a href="http://www.ti.com/product/cc3200">TI CC3200</a> (ARM Cortex-M4 core)</li>
+</ul>
+
+<p>As I’ve been primarily focused on an HTTP/2 server here, I configured mbed TLS to support the mandatory to implement (MTI) ciphersuite for HTTP/2, TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256, along with various required features such as SNI, ALPN, and X.509 certificates. This resulted in a config.h file with the following items #define’ed:</p>
+
+<ul>
+  <li>POLARSSL_HAVE_LONGLONG</li>
+  <li>POLARSSL_HAVE_ASM</li>
+  <li>POLARSSL_HAVE_IPV6</li>
+  <li>POLARSSL_PLATFORM_PRINTF_ALT</li>
+  <li>POLARSSL_PLATFORM_FPRINTF_ALT</li>
+  <li>POLARSSL_REMOVE_ARC4_CIPHERSUITES</li>
+  <li>POLARSSL_ECP_DP_SECP256R1_ENABLED</li>
+  <li>POLARSSL_KEY_EXCHANGE_ECDHE_RSA_ENABLED</li>
+  <li>POLARSSL_NO_PLATFORM_ENTROPY</li>
+  <li>POLARSSL_PKCS1_V15</li>
+  <li>POLARSSL_SSL_EXTENDED_MASTER_SECRET</li>
+  <li>POLARSSL_SSL_DISABLE_RENEGOTIATION</li>
+  <li>POLARSSL_SSL_MAX_FRAGMENT_LENGTH</li>
+  <li>POLARSSL_SSL_PROTO_TLS1_2</li>
+  <li>POLARSSL_SSL_ALPN</li>
+  <li>POLARSSL_SSL_SERVER_NAME_INDICATION</li>
+  <li>POLARSSL_SSL_TRUNCATED_HMAC</li>
+  <li>POLARSSL_SSL_SET_CURVES</li>
+  <li>POLARSSL_X509_CHECK_KEY_USAGE</li>
+  <li>POLARSSL_X509_CHECK_EXTENDED_KEY_USAGE</li>
+  <li>POLARSSL_AES_C</li>
+  <li>POLARSSL_ASN1_PARSE_C</li>
+  <li>POLARSSL_BIGNUM_C</li>
+  <li>POLARSSL_CIPHER_C</li>
+  <li>POLARSSL_CTR_DRBG_C</li>
+  <li>POLARSSL_ECDH_C</li>
+  <li>POLARSSL_ECP_C</li>
+  <li>POLARSSL_ENTROPY_C</li>
+  <li>POLARSSL_GCM_C</li>
+  <li>POLARSSL_MD_C</li>
+  <li>POLARSSL_OID_C</li>
+  <li>POLARSSL_PK_C</li>
+  <li>POLARSSL_PK_PARSE_C</li>
+  <li>POLARSSL_PLATFORM_C</li>
+  <li>POLARSSL_RSA_C</li>
+  <li>POLARSSL_SHA256_C</li>
+  <li>POLARSSL_SSL_CACHE_C</li>
+  <li>POLARSSL_SSL_SRV_C</li>
+  <li>POLARSSL_SSL_TLS_C</li>
+  <li>POLARSSL_X509_USE_C</li>
+  <li>POLARSSL_X509_CRT_PARSE_C</li>
+  <li>SSL_CIPHERSUITES TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</li>
+</ul>
+
+<p>With this config.h in place, I executed the following command:
+CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffunction-sections -fdata-sections” make lib</p>
+
+<p>This resulted in a static library (libmbedtls.a) with a size of <strong>238972 bytes</strong>. Keep in mind that this is doing <em>everything</em> in software (AES, SHA, ECC, etc.).</p>
+
+<p>One trick I learned along the way: It’s best to store your certificates and keys in DER format — no PEM. This allows you to remove POLARSSL_PEM_PARSE_C and POLARSSL_BASE64_C. With this trick, I went from a static library (libmbedtls.a) with a size of 243536 bytes to one with a size of 238972 bytes. This method also reduces size of the certificates and keys themselves.</p>
+
+<p>If you have any optimizations or findings with mbed TLS, particularly for HTTP/2, please share in the comments!</p>
+
+</div><!-- .entry-content -->
+<footer class="entry-meta">
+</footer><!-- .entry-meta -->
+</article>
+
+    </div><!-- #content -->
+    </div><!-- #primary -->
+    </div><!-- #main -->
+    <footer id="colophon" role="contentinfo">
+    <div id="site-generator">
+      <p><b>Disclaimer:</b> The views and opinions expressed herein are
+solely my own and do not necessarily reflect those of my employer, their
+ employees, partners, or any organization with which I am affiliated.</p>
+      <p>Copyright © 2019 Robby Simpson</p>
+    </div>
+    </footer>
+    </div><!-- #page -->
+  </body>
+</html>

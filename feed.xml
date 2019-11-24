@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-11-24T17:57:33-05:00</updated><id>/feed.xml</id><title type="html">Robby Simpson</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">RESTful HTTP Client in a Browser using JavaScript</title><link href="/2015/07/14/restful-http-client-in-a-browser-using-javascript.html" rel="alternate" type="text/html" title="RESTful HTTP Client in a Browser using JavaScript" /><published>2015-07-14T00:00:00-04:00</published><updated>2015-07-14T00:00:00-04:00</updated><id>/2015/07/14/restful-http-client-in-a-browser-using-javascript</id><content type="html" xml:base="/2015/07/14/restful-http-client-in-a-browser-using-javascript.html">&lt;p&gt;A frustration I’ve often faced when interacting with RESTful HTTP servers is that browsers make poor RESTful HTTP clients. Specifically, browsers only support the GET and POST methods and do not allow you to specify media types or other header values. This does not make for simple, self-served, human interfaces in the IoT world.&lt;/p&gt;
+
+&lt;p&gt;It turns out, with a little JavaScript magic, your browser can make a pretty decent RESTful HTTP client.&lt;/p&gt;
+
+&lt;p&gt;The code snippets below show how to perform a GET with a specified Accept header as well as a PUT with a specified Content-Type header. I’ll leave the extension to other methods and headers as an exercise to the reader.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function getOnOff(contentType)
+{
+    var xmlhttp = new XMLHttpRequest();
+    var ds = &quot;&quot;;
+    xmlhttp.open(&quot;GET&quot;, &quot;/onoff&quot;);
+    xmlhttp.setRequestHeader(&quot;Accept&quot;, contentType);
+    xmlhttp.onreadystatechange = function()
+    {
+        if(xmlhttp.readyState == 4)
+        {
+            ds = xmlhttp.responseText;
+            document.forms[0].textArea1.value = ds;
+        }
+    }
+    xmlhttp.send();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function putOnOff(state, contentType)
+{
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open(&quot;PUT&quot;, &quot;/onoff&quot;);
+    xmlhttp.setRequestHeader(&quot;Content-Type&quot;, contentType);
+    if(contentType == &quot;application/xml&quot;)
+    {
+        if(state == &quot;on&quot;)
+        {
+            xmlhttp.send(&quot;&amp;lt;OnOff&amp;gt;\n\t&amp;lt;state&amp;gt;on&amp;lt;/state&amp;gt;\n&amp;lt;/OnOff&amp;gt;&quot;);
+        }
+        else if(state == &quot;off&quot;)
+        {
+            xmlhttp.send(&quot;&amp;lt;OnOff&amp;gt;\n\t&amp;lt;state&amp;gt;off&amp;lt;/state&amp;gt;\n&amp;lt;/OnOff&amp;gt;&quot;);
+        }
+    }
+    else if(contentType == &quot;application/json&quot;)
+    {
+        if(state == &quot;on&quot;)
+        {
+            xmlhttp.send(&quot;{\n\&quot;state\&quot;: \&quot;on\&quot;\n}&quot;);
+        }
+        else if(state == &quot;off&quot;)
+        {
+            xmlhttp.send(&quot;{\n\&quot;state\&quot;: \&quot;off\&quot;\n}&quot;);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I’ve integrated a page with similar functions into the &lt;a href=&quot;/deuterium/&quot; title=&quot;Deuterium&quot;&gt;Deuterium&lt;/a&gt; demo to provide a simple human interface. The demo server simply serves up this page and the user can easily interact RESTfully with the server’s resources. Check out the Deuterium test servers to see this in action.&lt;/p&gt;
+
+&lt;p&gt;One limitation (unless you want to fool around with your browser’s security settings) is that these snippets are subject to cross domain scripting restrictions, making a generic client less easy. At that point, you may want to look into various browser plugins.&lt;/p&gt;
+
+&lt;p&gt;As a bonus, if your browser supports HTTP/2, then this trick will work seamlessly with HTTP/2 (essentially the JavaScript utilizes whatever transport the browser is using).&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">A frustration I’ve often faced when interacting with RESTful HTTP servers is that browsers make poor RESTful HTTP clients. Specifically, browsers only support the GET and POST methods and do not allow you to specify media types or other header values. This does not make for simple, self-served, human interfaces in the IoT world.</summary></entry><entry><title type="html">Implementing HTTP/2 with mbed TLS</title><link href="/2015/05/14/implementing-http2-with-mbed-tls.html" rel="alternate" type="text/html" title="Implementing HTTP/2 with mbed TLS" /><published>2015-05-14T00:00:00-04:00</published><updated>2015-05-14T00:00:00-04:00</updated><id>/2015/05/14/implementing-http2-with-mbed-tls</id><content type="html" xml:base="/2015/05/14/implementing-http2-with-mbed-tls.html">&lt;p&gt;I’ve &lt;a href=&quot;/deuterium&quot;&gt;recently been exploring&lt;/a&gt; &lt;a href=&quot;https://mbed.org/technology/mbed-tls/&quot;&gt;mbed TLS&lt;/a&gt; and thought I’d share some numbers I’ve found.&lt;/p&gt;
+
+&lt;p&gt;First, the specifics:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;mbed TLS version: 1.3.10&lt;/li&gt;
+  &lt;li&gt;Compiler: arm-none-eabi-gcc (GNU Tools for ARM Embedded Processors) 4.9.3 20141119 (release) [ARM/embedded-4_9-branch revision 218278]&lt;/li&gt;
+  &lt;li&gt;Processor: &lt;a href=&quot;http://www.ti.com/product/cc3200&quot;&gt;TI CC3200&lt;/a&gt; (ARM Cortex-M4 core)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As I’ve been primarily focused on an HTTP/2 server here, I configured mbed TLS to support the mandatory to implement (MTI) ciphersuite for HTTP/2, TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256, along with various required features such as SNI, ALPN, and X.509 certificates. This resulted in a config.h file with the following items #define’ed:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;POLARSSL_HAVE_LONGLONG&lt;/li&gt;
+  &lt;li&gt;POLARSSL_HAVE_ASM&lt;/li&gt;
+  &lt;li&gt;POLARSSL_HAVE_IPV6&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PLATFORM_PRINTF_ALT&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PLATFORM_FPRINTF_ALT&lt;/li&gt;
+  &lt;li&gt;POLARSSL_REMOVE_ARC4_CIPHERSUITES&lt;/li&gt;
+  &lt;li&gt;POLARSSL_ECP_DP_SECP256R1_ENABLED&lt;/li&gt;
+  &lt;li&gt;POLARSSL_KEY_EXCHANGE_ECDHE_RSA_ENABLED&lt;/li&gt;
+  &lt;li&gt;POLARSSL_NO_PLATFORM_ENTROPY&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PKCS1_V15&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_EXTENDED_MASTER_SECRET&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_DISABLE_RENEGOTIATION&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_MAX_FRAGMENT_LENGTH&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_PROTO_TLS1_2&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_ALPN&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_SERVER_NAME_INDICATION&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_TRUNCATED_HMAC&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_SET_CURVES&lt;/li&gt;
+  &lt;li&gt;POLARSSL_X509_CHECK_KEY_USAGE&lt;/li&gt;
+  &lt;li&gt;POLARSSL_X509_CHECK_EXTENDED_KEY_USAGE&lt;/li&gt;
+  &lt;li&gt;POLARSSL_AES_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_ASN1_PARSE_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_BIGNUM_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_CIPHER_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_CTR_DRBG_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_ECDH_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_ECP_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_ENTROPY_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_GCM_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_MD_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_OID_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PK_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PK_PARSE_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_PLATFORM_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_RSA_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SHA256_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_CACHE_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_SRV_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_SSL_TLS_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_X509_USE_C&lt;/li&gt;
+  &lt;li&gt;POLARSSL_X509_CRT_PARSE_C&lt;/li&gt;
+  &lt;li&gt;SSL_CIPHERSUITES TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With this config.h in place, I executed the following command:
+CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffunction-sections -fdata-sections” make lib&lt;/p&gt;
+
+&lt;p&gt;This resulted in a static library (libmbedtls.a) with a size of &lt;strong&gt;238972 bytes&lt;/strong&gt;. Keep in mind that this is doing &lt;em&gt;everything&lt;/em&gt; in software (AES, SHA, ECC, etc.).&lt;/p&gt;
+
+&lt;p&gt;One trick I learned along the way: It’s best to store your certificates and keys in DER format — no PEM. This allows you to remove POLARSSL_PEM_PARSE_C and POLARSSL_BASE64_C. With this trick, I went from a static library (libmbedtls.a) with a size of 243536 bytes to one with a size of 238972 bytes. This method also reduces size of the certificates and keys themselves.&lt;/p&gt;
+
+&lt;p&gt;If you have any optimizations or findings with mbed TLS, particularly for HTTP/2, please share in the comments!&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">I’ve recently been exploring mbed TLS and thought I’d share some numbers I’ve found.</summary></entry><entry><title type="html">Open Source Software — Who Actually Reviews the Code?</title><link href="/2015/03/01/open-source-software-who-actually-reviews-the-code.html" rel="alternate" type="text/html" title="Open Source Software — Who Actually Reviews the Code?" /><published>2015-03-01T00:00:00-05:00</published><updated>2015-03-01T00:00:00-05:00</updated><id>/2015/03/01/open-source-software-who-actually-reviews-the-code</id><content type="html" xml:base="/2015/03/01/open-source-software-who-actually-reviews-the-code.html">&lt;p&gt;&lt;em&gt;This post is co-authored by Robby Simpson and Sven Krasser. So, you can find it on both &lt;a href=&quot;http://robbysimpson.com/&quot;&gt;Robby’s&lt;/a&gt; and &lt;a href=&quot;http://www.skrasser.com/&quot;&gt;Sven’s&lt;/a&gt; blogs — you should check them both out!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Last year saw a large number of critical bugs in open source software (OSS). These bugs received a lot of media attention and re-opened the discussion of &lt;a href=&quot;http://linux.slashdot.org/story/15/02/21/1621244/linux-foundation-bugs-can-be-made-shallow-with-proper-funding&quot;&gt;bugs&lt;/a&gt; and &lt;a href=&quot;http://www.itworld.com/article/2864095/think-that-software-library-is-safe-to-use-not-so-fast.html&quot;&gt;security&lt;/a&gt; in OSS. This has led many to question whether ESR’s famous statement that &lt;a href=&quot;http://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/ar01s04.html&quot;&gt;“Given enough eyeballs, all bugs are shallow”&lt;/a&gt; holds true.&lt;/p&gt;
+
+&lt;p&gt;There are two aspects to consider here: first, does bug discovery parallelize well? Particularly for subtle security-related bugs, a large number of users does not necessarily aid discovery, but rather a dedicated review effort may be required. We’ll leave this aspect for a separate discussion…&lt;/p&gt;
+
+&lt;p&gt;Second, are there actually more eyeballs looking at open source software? For that question, we have some data to contribute to the discussion. In 2003, Robby released NETI@home, a project to gather network performance metrics from endhosts, as part of his &lt;a href=&quot;https://smartech.gatech.edu/handle/1853/14612&quot;&gt;PhD dissertation&lt;/a&gt; work at Georgia Tech. You can find the &lt;a href=&quot;http://sourceforge.net/projects/neti/&quot;&gt;source code&lt;/a&gt; on SourceForge. The NETI@home agent runs on end user machines and gathers various network performance data (e.g., numbers of flows per protocol, number of packets per flow, TCP window size). Such data has many uses, including &lt;a href=&quot;/papers/csimpson-empirical.pdf&quot;&gt;improving models in network simulations&lt;/a&gt; and &lt;a href=&quot;/papers/neti-honey.pdf&quot;&gt;observing suspicious traffic patterns&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A driving factor for releasing NETI@home as OSS stems from the fact that it gathers a lot of information that could raise privacy concerns with users. The most forthcoming way to address these concerns, which could hinder adoption, is to allow users to actually read the code. And as researchers that piqued our curiosity — how many users have these concerns and will further review the source code?&lt;/p&gt;
+
+&lt;p&gt;How could we measure this user code review? Download stats for the source code are an option, but they don’t tell us much about users actually looking at the code. Instead, we placed a comment in the section of code where privacy preferences are honored, which reads:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/*
+* You have found the &quot;hid-
+* den message!&quot; Please visit
+* http://www.neti.gatech.edu/sec/sec.html
+* and log in as user 'neti'
+* and pw 'hobbit'
+*/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The web page mentioned in this comment contained an explanation along with an email address (it was taken down around 2009). Visiting such a link requires a lower threshold than sending an email, so we were looking for both pageviews of that page along with emails to the address given on that page. The former would have told us someone found the comment while the latter would confirm that someone would have taken action on it. However, we didn’t receive any pageviews (and therefore we didn’t receive any emails either).&lt;/p&gt;
+
+&lt;p&gt;To put this into perspective with NETI@home’s user base, there were about 13,000 downloads of the software, and there were about 4,500 active users that ran the agent. We can safely say that the type of user running the software falls into the geek category, so there’s some expected selection bias with respect to taking an interest in the source code.&lt;/p&gt;
+
+&lt;p&gt;Granted, this is slightly different than contributors to an open source project reviewing code. Nonetheless, it came as a surprise to us, and it certainly went against the conventional wisdom at the time.&lt;/p&gt;
+
+&lt;p&gt;As fans of OSS, we were both disappointed in the results. However, we hope that sharing this data point will add to the larger discussion, help strengthen the open source community, and show the need for dedicated code review.&lt;/p&gt;
+
+&lt;p&gt;We would love to hear your thoughts on this study, the effectiveness of OSS, and how to improve these shortcomings. Feel free to leave comments below!&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">This post is co-authored by Robby Simpson and Sven Krasser. So, you can find it on both Robby’s and Sven’s blogs — you should check them both out!</summary></entry><entry><title type="html">First IoT Device with HTTP/2?</title><link href="/2015/02/16/first-iot-device-with-http2.html" rel="alternate" type="text/html" title="First IoT Device with HTTP/2?" /><published>2015-02-16T00:00:00-05:00</published><updated>2015-02-16T00:00:00-05:00</updated><id>/2015/02/16/first-iot-device-with-http2</id><content type="html" xml:base="/2015/02/16/first-iot-device-with-http2.html">&lt;p&gt;As far as I know, this is the first embedded / Internet of Things device to run &lt;a href=&quot;https://tools.ietf.org/html/draft-ietf-httpbis-http2&quot;&gt;HTTP/2&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/CC3200_HTTP2-225x300.jpg&quot; alt=&quot;TI CC3200 LaunchPad running an HTTP/2 server&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This particular platform is a &lt;a href=&quot;http://www.ti.com/product/cc3200&quot;&gt;Texas Instruments CC3200 LaunchPad&lt;/a&gt;. The CC3200 is a Wi-Fi SoC that incorporates an ARM Cortex-M4 and Wi-Fi into a single piece of silicon.&lt;/p&gt;
+
+&lt;p&gt;Over the past couple of days, I ported the &lt;a href=&quot;/deuterium/&quot; title=&quot;Deuterium&quot;&gt;Deuterium HTTP/2 library&lt;/a&gt; to the CC3200 and set up a simple HTTP/2 server with a RESTful interface to one of the onboard LEDs.&lt;/p&gt;
+
+&lt;p&gt;I went with Wi-Fi in this case (as opposed to 802.15.4, for example) so that I can easily show it off at the upcoming &lt;a href=&quot;http://www.ietf.org/meeting/92/&quot;&gt;IETF in Dallas&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Granted, I had 256 KB of RAM and BSD socket support to work with, so no huge accomplishment… But, it still demonstrates the capabilities of HTTP/2 for the Internet of Things.&lt;/p&gt;
+
+&lt;p&gt;Kudos to TI for such a good product!&lt;/p&gt;
+
+&lt;p&gt;If you are interested in using HTTP/2 on this or another embedded platform, check out the &lt;a href=&quot;/deuterium/&quot; title=&quot;Deuterium&quot;&gt;Deuterium HTTP/2 library&lt;/a&gt;.&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">As far as I know, this is the first embedded / Internet of Things device to run HTTP/2!</summary></entry><entry><title type="html">HTTP/2 and the Internet of Things</title><link href="/2015/01/26/http2-and-the-internet-of-things.html" rel="alternate" type="text/html" title="HTTP/2 and the Internet of Things" /><published>2015-01-26T00:00:00-05:00</published><updated>2015-01-26T00:00:00-05:00</updated><id>/2015/01/26/http2-and-the-internet-of-things</id><content type="html" xml:base="/2015/01/26/http2-and-the-internet-of-things.html">&lt;p&gt;I have never been a fan of using custom or obscure protocols to talk to embedded devices, particularly if the goal is to bring them into the mainstream of communications (e.g., the Internet of Things). I’m looking at you &lt;a href=&quot;https://tools.ietf.org/html/rfc7252&quot;&gt;CoAP&lt;/a&gt;, &lt;a href=&quot;https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=mqtt&quot;&gt;MQTT&lt;/a&gt;, etc.!&lt;/p&gt;
+
+&lt;p&gt;It’s not that CoAP, MQTT, and all of the others aren’t well designed, useful, or perhaps even better. It’s that they are not what the rest of the Internet are using to communicate.&lt;/p&gt;
+
+&lt;p&gt;So, what is? Well, I think we all know the answer to that: HTTP. Even email, which has always had its own protocols, is largely using HTTP at this point.&lt;/p&gt;
+
+&lt;p&gt;The HTTP we all know and love, &lt;a href=&quot;http://tools.ietf.org/html/rfc7230&quot;&gt;HTTP/1.1&lt;/a&gt;, is poorly suited to embedded devices. Its use of loose, plain ASCII makes for complex parsing (codespace!) and eats up a lot of RAM and buffer space. Then, when you try and shuffle all of those ASCII characters across the network, you eat up bandwidth — something embedded devices often do not have in abundance. Further, transmitting bits takes energy – a particular problem if you are battery-powered.&lt;/p&gt;
+
+&lt;p&gt;Well, I’m hoping that the next version of HTTP, &lt;a href=&quot;https://tools.ietf.org/html/draft-ietf-httpbis-http2&quot;&gt;HTTP/2&lt;/a&gt;, helps to lessen those problems. Of course it will not be as efficient and great for embedded devices as a protocol designed for the embedded space, but consideration was given to the embedded space during the design of HTTP/2. And the goals of the large Web servers often align with those of the embedded space — less memory and bandwidth also matter if you are serving millions of clients!&lt;/p&gt;
+
+&lt;p&gt;How does HTTP/2 help? Well, for starters, it employs a very efficient, yet low memory (unlike gzip) compression technique, &lt;a href=&quot;https://tools.ietf.org/html/draft-ietf-httpbis-header-compression&quot;&gt;HPACK&lt;/a&gt;. HPACK works by assigning header names and values to entries in tables. Then, only the entry number needs to be used. This allows for efficient use of bandwidth while not sacrificing the original syntax of HTTP. The sizes of the tables can be limited via negotiation, limiting RAM usage.&lt;/p&gt;
+
+&lt;p&gt;What about the complex parsing, you ask? Well, it’s not entirely gone, but HTTP/2 did a lot to try and tighten the syntax and thus the parsing. As with all new protocols, a lot of the legacy could be dropped or tightened. Finally, for those header names and values that may not warrant entry into the tables built up between server and client, Huffman codes can be used. Canonical Huffman codes, in fact.&lt;/p&gt;
+
+&lt;p&gt;HTTP/2 also encourages each client/server pair to use a single TCP connection. Individual requests and their responses are sent in streams over this connection. Once again, the number of simultaneous streams can also be limited via negotiation. This connection reuse means less network overhead – no more three-way handshake for each request/response, no more slow start over and over again, no more TLS renegotiation over and over again. You get the point. And considering IoT devices tend to focus on short messages, the benefits really add up.&lt;/p&gt;
+
+&lt;p&gt;Other features of HTTP/2 that are particularly beneficial to the embedded world include: binary message framing, header list size negotiation, server push, ping, and windowing. Each of these could definitely use a lot more description, but I’m hoping to avoid “tl;dr”.&lt;/p&gt;
+
+&lt;p&gt;In conclusion, I believe that HTTP/2, while not perfect, will allow embedded/IoT devices to fully join the rest of the Internet and no longer be second-class citizens. Truly enabling the Web of Things!&lt;/p&gt;
+
+&lt;p&gt;If you are interested in using HTTP/2 for an IoT application, check out &lt;a href=&quot;/deuterium/&quot; title=&quot;Deuterium&quot;&gt;Deuterium&lt;/a&gt;, my own embedded implementation of HTTP/2.&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">I have never been a fan of using custom or obscure protocols to talk to embedded devices, particularly if the goal is to bring them into the mainstream of communications (e.g., the Internet of Things). I’m looking at you CoAP, MQTT, etc.!</summary></entry></feed>
