@@ -1,0 +1,6 @@
+<FunctionSetAssignments href="/sep2/edev/0/fsal/0" subscribable="0" xmlns="urn:ieee:std:2030.5:ns">
+	<DERProgramListLink all="1" href="/sep2/edev/0/fsal/0/derp"/>
+	<TimeLink href="/sep2/tm"/>
+	<mRID>0ED30F5A0000</mRID>
+	<description>Test FunctionSetAssignment</description>
+</FunctionSetAssignments>

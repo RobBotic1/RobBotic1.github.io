@@ -16,7 +16,7 @@
 <meta property="og:url" content="/" />
 <meta property="og:site_name" content="Robby Simpson" />
 <script type="application/ld+json">
-{"description":"Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.","@type":"WebSite","url":"/","name":"Robby Simpson","headline":"Robby Simpson My Musings, Rants, and Sometimes Useful Information","@context":"https://schema.org"}</script>
+{"description":"Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.","@type":"WebSite","url":"/","headline":"Robby Simpson My Musings, Rants, and Sometimes Useful Information","name":"Robby Simpson","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -35,15 +35,15 @@
   <div>
   <ul id="menu-menu-1" class="menu">
   
-    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home current-menu-item current-page-item"><a href="/">home</a></li>
+    <li class="menu-item menu-item-object-custom menu-item-home current-menu-item current-page-item"><a href="/">home</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/publications.html">publications</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/publications.html">publications</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/presentations.html">presentations</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/presentations.html">presentations</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about.html">about me</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/about.html">about me</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/deuterium/index.html">Deuterium</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/deuterium/index.html">Deuterium</a></li>
   
   </ul>
   </div>
@@ -54,11 +54,11 @@
     <div id="primary">
     <div id="content" role="main">
     
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2019/11/25/still-here-now-with-jekyll-and-github.html" rel="bookmark">Still Here, Now with Jekyll and GitHub!</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">25 Nov 2019</time>
+<span class="sep">Posted on </span><time class="entry-date">Nov 25, 2019</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">
@@ -81,11 +81,11 @@
 </footer>
 </article>
 
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2015/07/14/restful-http-client-in-a-browser-using-javascript.html" rel="bookmark">RESTful HTTP Client in a Browser using JavaScript</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">14 Jul 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">Jul 14, 2015</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">
@@ -95,55 +95,53 @@
 
 <p>The code snippets below show how to perform a GET with a specified Accept header as well as a PUT with a specified Content-Type header. I’ll leave the extension to other methods and headers as an exercise to the reader.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function getOnOff(contentType)
-{
-    var xmlhttp = new XMLHttpRequest();
-    var ds = "";
-    xmlhttp.open("GET", "/onoff");
-    xmlhttp.setRequestHeader("Accept", contentType);
-    xmlhttp.onreadystatechange = function()
-    {
-        if(xmlhttp.readyState == 4)
-        {
-            ds = xmlhttp.responseText;
-            document.forms[0].textArea1.value = ds;
-        }
-    }
-    xmlhttp.send();
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getOnOff</span><span class="p">(</span><span class="nx">contentType</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xmlhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">/onoff</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Accept</span><span class="dl">"</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">ds</span> <span class="o">=</span> <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">textArea1</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">ds</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
 
 <hr />
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function putOnOff(state, contentType)
-{
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("PUT", "/onoff");
-    xmlhttp.setRequestHeader("Content-Type", contentType);
-    if(contentType == "application/xml")
-    {
-        if(state == "on")
-        {
-            xmlhttp.send("&lt;OnOff&gt;\n\t&lt;state&gt;on&lt;/state&gt;\n&lt;/OnOff&gt;");
-        }
-        else if(state == "off")
-        {
-            xmlhttp.send("&lt;OnOff&gt;\n\t&lt;state&gt;off&lt;/state&gt;\n&lt;/OnOff&gt;");
-        }
-    }
-    else if(contentType == "application/json")
-    {
-        if(state == "on")
-        {
-            xmlhttp.send("{\n\"state\": \"on\"\n}");
-        }
-        else if(state == "off")
-        {
-            xmlhttp.send("{\n\"state\": \"off\"\n}");
-        }
-    }
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">putOnOff</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xmlhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">/onoff</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">contentType</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">application/xml</span><span class="dl">"</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">on</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;OnOff&gt;</span><span class="se">\n\t</span><span class="s2">&lt;state&gt;on&lt;/state&gt;</span><span class="se">\n</span><span class="s2">&lt;/OnOff&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">off</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;OnOff&gt;</span><span class="se">\n\t</span><span class="s2">&lt;state&gt;off&lt;/state&gt;</span><span class="se">\n</span><span class="s2">&lt;/OnOff&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">contentType</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">on</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">{</span><span class="se">\n\"</span><span class="s2">state</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">on</span><span class="se">\"\n</span><span class="s2">}</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">off</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">{</span><span class="se">\n\"</span><span class="s2">state</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">off</span><span class="se">\"\n</span><span class="s2">}</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>I’ve integrated a page with similar functions into the <a href="/deuterium/" title="Deuterium">Deuterium</a> demo to provide a simple human interface. The demo server simply serves up this page and the user can easily interact RESTfully with the server’s resources. Check out the Deuterium test servers to see this in action.</p>
 
@@ -156,11 +154,11 @@
 </footer>
 </article>
 
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2015/05/14/implementing-http2-with-mbed-tls.html" rel="bookmark">Implementing HTTP/2 with mbed TLS</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">14 May 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">May 14, 2015</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">
@@ -228,18 +226,18 @@ CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffu
 
 <p>One trick I learned along the way: It’s best to store your certificates and keys in DER format — no PEM. This allows you to remove POLARSSL_PEM_PARSE_C and POLARSSL_BASE64_C. With this trick, I went from a static library (libmbedtls.a) with a size of 243536 bytes to one with a size of 238972 bytes. This method also reduces size of the certificates and keys themselves.</p>
 
-<p>If you have any optimizations or findings with mbed TLS, particularly for HTTP/2, please share in the comments!</p>
+<p>That’s it for now - I hope you find these tips helpful!</p>
 
 </div>
 <footer class="entry-meta">
 </footer>
 </article>
 
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2015/03/01/open-source-software-who-actually-reviews-the-code.html" rel="bookmark">Open Source Software — Who Actually Reviews the Code?</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">01 Mar 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">Mar 01, 2015</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">
@@ -255,14 +253,13 @@ CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffu
 
 <p>How could we measure this user code review? Download stats for the source code are an option, but they don’t tell us much about users actually looking at the code. Instead, we placed a comment in the section of code where privacy preferences are honored, which reads:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cm">/*
 * You have found the "hid-
 * den message!" Please visit
 * http://www.neti.gatech.edu/sec/sec.html
 * and log in as user 'neti'
 * and pw 'hobbit'
-*/
-</code></pre></div></div>
+*/</span></code></pre></figure>
 
 <p>The web page mentioned in this comment contained an explanation along with an email address (it was taken down around 2009). Visiting such a link requires a lower threshold than sending an email, so we were looking for both pageviews of that page along with emails to the address given on that page. The former would have told us someone found the comment while the latter would confirm that someone would have taken action on it. However, we didn’t receive any pageviews (and therefore we didn’t receive any emails either).</p>
 
@@ -272,18 +269,16 @@ CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffu
 
 <p>As fans of OSS, we were both disappointed in the results. However, we hope that sharing this data point will add to the larger discussion, help strengthen the open source community, and show the need for dedicated code review.</p>
 
-<p>We would love to hear your thoughts on this study, the effectiveness of OSS, and how to improve these shortcomings. Feel free to leave comments below!</p>
-
 </div>
 <footer class="entry-meta">
 </footer>
 </article>
 
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2015/02/16/first-iot-device-with-http2.html" rel="bookmark">First IoT Device with HTTP/2?</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">16 Feb 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">Feb 16, 2015</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">
@@ -308,11 +303,11 @@ CC=arm-none-eabi-gcc AR=arm-none-eabi-ar CFLAGS+=”-mthumb -mcpu=cortex-m4 -ffu
 </footer>
 </article>
 
-<article class="post type-post status-publish format-standard hentry">
+<article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title"><a href="/2015/01/26/http2-and-the-internet-of-things.html" rel="bookmark">HTTP/2 and the Internet of Things</a></h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">26 Jan 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">Jan 26, 2015</time>
 </div><!-- .entry-meta -->
 </header>
 <div class="entry-content">

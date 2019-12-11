@@ -1,0 +1,20 @@
+<DERControlList href="/sep2/edev/0/fsal/0/derp/0/derc" subscribable="1" all="1" results="1" xmlns="urn:ieee:std:2030.5:ns">
+	<DERControl href="/sep2/edev/0/fsal/0/derp/0/derc/0" replyTo="/sep2/rsps/0/rsp" responseRequired="03">
+		<mRID>0ED30F5A0003</mRID>
+		<description>Test DERControl</description>
+		<creationTime>1575761416</creationTime>
+		<EventStatus>
+			<currentStatus>0</currentStatus>
+			<dateTime>1575761416</dateTime>
+			<potentiallySuperseded>false</potentiallySuperseded>
+		</EventStatus>
+		<interval>
+			<duration>180</duration>
+			<start>1575761436</start>
+		</interval>
+		<DERControlBase>
+			<opModConnect>false</opModConnect>
+			<opModEnergize>false</opModEnergize>
+		</DERControlBase>
+	</DERControl>
+</DERControlList>

@@ -1,0 +1,8 @@
+<Time href="/sep2/tm" xmlns="urn:ieee:std:2030.5:ns" pollRate="900">
+	<currentTime>1575761406</currentTime>
+	<dstEndTime>1604196000</dstEndTime>
+	<dstOffset>3600</dstOffset>
+	<dstStartTime>1583632800</dstStartTime>
+	<quality>5</quality>
+	<tzOffset>-18000</tzOffset>
+</Time>

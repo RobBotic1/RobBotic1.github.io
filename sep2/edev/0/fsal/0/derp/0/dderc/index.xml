@@ -1,0 +1,10 @@
+<DefaultDERControl href="/sep2/edev/0/fsal/0/derp/0/dderc" xmlns="urn:ieee:std:2030.5:ns">
+	<mRID>0ED30F5A0002</mRID>
+	<description>Default DERControl</description>
+	<DERControlBase>
+		<opModMaxLimW>10000</opModMaxLimW>
+		<opModVoltVar href="/sep2/dc/1"/>
+	</DERControlBase>
+	<setGradW>0</setGradW>
+	<setSoftGradW>0</setSoftGradW>
+</DefaultDERControl>

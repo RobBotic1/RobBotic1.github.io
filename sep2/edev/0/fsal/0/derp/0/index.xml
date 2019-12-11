@@ -1,0 +1,9 @@
+<DERProgram href="/sep2/edev/0/fsal/0/derp/0" xmlns="urn:ieee:std:2030.5:ns">
+	<mRID>0ED30F5A0001</mRID>
+	<description>Test DERProgram</description>
+	<ActiveDERControlListLink href="/sep2/edev/0/fsal/0/derp/0/actderc" all="0"/>
+	<DefaultDERControlLink href="/sep2/edev/0/fsal/0/derp/0/dderc"/>
+	<DERControlListLink href="/sep2/edev/0/fsal/0/derp/0/derc" all="1"/>
+	<DERCurveListLink href="/sep2/edev/0/fsal/0/derp/0/dc" all="1"/>
+	<primacy>12</primacy>
+</DERProgram>

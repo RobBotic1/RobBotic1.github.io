@@ -19,7 +19,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2015-07-14T00:00:00-04:00" />
 <script type="application/ld+json">
-{"description":"A frustration I’ve often faced when interacting with RESTful HTTP servers is that browsers make poor RESTful HTTP clients. Specifically, browsers only support the GET and POST methods and do not allow you to specify media types or other header values. This does not make for simple, self-served, human interfaces in the IoT world.","mainEntityOfPage":{"@type":"WebPage","@id":"/2015/07/14/restful-http-client-in-a-browser-using-javascript.html"},"@type":"BlogPosting","url":"/2015/07/14/restful-http-client-in-a-browser-using-javascript.html","headline":"RESTful HTTP Client in a Browser using JavaScript","dateModified":"2015-07-14T00:00:00-04:00","datePublished":"2015-07-14T00:00:00-04:00","author":{"@type":"Person","name":"robby"},"@context":"https://schema.org"}</script>
+{"description":"A frustration I’ve often faced when interacting with RESTful HTTP servers is that browsers make poor RESTful HTTP clients. Specifically, browsers only support the GET and POST methods and do not allow you to specify media types or other header values. This does not make for simple, self-served, human interfaces in the IoT world.","@type":"BlogPosting","url":"/2015/07/14/restful-http-client-in-a-browser-using-javascript.html","headline":"RESTful HTTP Client in a Browser using JavaScript","dateModified":"2015-07-14T00:00:00-04:00","datePublished":"2015-07-14T00:00:00-04:00","author":{"@type":"Person","name":"robby"},"mainEntityOfPage":{"@type":"WebPage","@id":"/2015/07/14/restful-http-client-in-a-browser-using-javascript.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -38,15 +38,15 @@
   <div>
   <ul id="menu-menu-1" class="menu">
   
-    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href="/">home</a></li>
+    <li class="menu-item menu-item-object-custom menu-item-home"><a href="/">home</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/publications.html">publications</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/publications.html">publications</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/presentations.html">presentations</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/presentations.html">presentations</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about.html">about me</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/about.html">about me</a></li>
   
-    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/deuterium/index.html">Deuterium</a></li>
+    <li class="menu-item menu-item-object-page"><a href="/deuterium/index.html">Deuterium</a></li>
   
   </ul>
   </div>
@@ -56,11 +56,11 @@
     <div id="main">
     <div id="primary">
     <div id="content" role="main">
-    <article class="post type-post status-publish format-standard hentry">
+    <article class="post hentry">
 <header class="entry-header">
 <h1 class="entry-title">RESTful HTTP Client in a Browser using JavaScript</h1>
 <div class="entry-meta">
-<span class="sep">Posted on </span><time class="entry-date">14 Jul 2015</time>
+<span class="sep">Posted on </span><time class="entry-date">Jul 14, 2015</time>
 </div><!-- .entry-meta -->
 </header><!-- .entry-header -->
 
@@ -71,55 +71,53 @@
 
 <p>The code snippets below show how to perform a GET with a specified Accept header as well as a PUT with a specified Content-Type header. I’ll leave the extension to other methods and headers as an exercise to the reader.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function getOnOff(contentType)
-{
-    var xmlhttp = new XMLHttpRequest();
-    var ds = "";
-    xmlhttp.open("GET", "/onoff");
-    xmlhttp.setRequestHeader("Accept", contentType);
-    xmlhttp.onreadystatechange = function()
-    {
-        if(xmlhttp.readyState == 4)
-        {
-            ds = xmlhttp.responseText;
-            document.forms[0].textArea1.value = ds;
-        }
-    }
-    xmlhttp.send();
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">getOnOff</span><span class="p">(</span><span class="nx">contentType</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xmlhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">ds</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">/onoff</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Accept</span><span class="dl">"</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">ds</span> <span class="o">=</span> <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">textArea1</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">ds</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
 
 <hr />
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function putOnOff(state, contentType)
-{
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("PUT", "/onoff");
-    xmlhttp.setRequestHeader("Content-Type", contentType);
-    if(contentType == "application/xml")
-    {
-        if(state == "on")
-        {
-            xmlhttp.send("&lt;OnOff&gt;\n\t&lt;state&gt;on&lt;/state&gt;\n&lt;/OnOff&gt;");
-        }
-        else if(state == "off")
-        {
-            xmlhttp.send("&lt;OnOff&gt;\n\t&lt;state&gt;off&lt;/state&gt;\n&lt;/OnOff&gt;");
-        }
-    }
-    else if(contentType == "application/json")
-    {
-        if(state == "on")
-        {
-            xmlhttp.send("{\n\"state\": \"on\"\n}");
-        }
-        else if(state == "off")
-        {
-            xmlhttp.send("{\n\"state\": \"off\"\n}");
-        }
-    }
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">putOnOff</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xmlhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">/onoff</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">contentType</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">application/xml</span><span class="dl">"</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">on</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;OnOff&gt;</span><span class="se">\n\t</span><span class="s2">&lt;state&gt;on&lt;/state&gt;</span><span class="se">\n</span><span class="s2">&lt;/OnOff&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">off</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;OnOff&gt;</span><span class="se">\n\t</span><span class="s2">&lt;state&gt;off&lt;/state&gt;</span><span class="se">\n</span><span class="s2">&lt;/OnOff&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">contentType</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">on</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">{</span><span class="se">\n\"</span><span class="s2">state</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">on</span><span class="se">\"\n</span><span class="s2">}</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">off</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">xmlhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">{</span><span class="se">\n\"</span><span class="s2">state</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">off</span><span class="se">\"\n</span><span class="s2">}</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>I’ve integrated a page with similar functions into the <a href="/deuterium/" title="Deuterium">Deuterium</a> demo to provide a simple human interface. The demo server simply serves up this page and the user can easily interact RESTfully with the server’s resources. Check out the Deuterium test servers to see this in action.</p>
 
