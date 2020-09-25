@@ -1,6 +1,6 @@
 <EndDevice href="/sep2/edev/0" subscribable="0" xmlns="urn:ieee:std:2030.5:ns">
-	<lFDI>3E4F45AB31EDFE5B67E343E5E4562E31984E23E5</lFDI>
-	<sFDI>987654321005</sFDI>
+	<lFDI>58278BB1A31E6BB03FCAE6DD2CB6B43E5BD3FCBC</lFDI>
+	<sFDI>236637867787</sFDI>
 	<changedTime>1379905200</changedTime>
 	<FunctionSetAssignmentsListLink all="3" href="/sep2/edev/0/fsal"/>
 	<RegistrationLink href="/sep2/edev/0/reg"/>
