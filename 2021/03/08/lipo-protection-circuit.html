@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Microcontroller-Controlled LiPo Protection Circuit</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Robby Simpson" />
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Microcontroller-Controlled LiPo Protection Circuit | Robby Simpson</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Microcontroller-Controlled LiPo Protection Circuit" />
+<meta name="author" content="robby" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery." />
+<meta property="og:description" content="Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery." />
+<link rel="canonical" href="/2021/03/08/lipo-protection-circuit.html" />
+<meta property="og:url" content="/2021/03/08/lipo-protection-circuit.html" />
+<meta property="og:site_name" content="Robby Simpson" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-08T00:00:00-05:00" />
+<script type="application/ld+json">
+{"headline":"Microcontroller-Controlled LiPo Protection Circuit","dateModified":"2021-03-08T00:00:00-05:00","datePublished":"2021-03-08T00:00:00-05:00","author":{"@type":"Person","name":"robby"},"mainEntityOfPage":{"@type":"WebPage","@id":"/2021/03/08/lipo-protection-circuit.html"},"description":"Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery.","@type":"BlogPosting","url":"/2021/03/08/lipo-protection-circuit.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <!-- <body class="home blog single-author two-column right-sidebar"> -->
+  <body class="home blog single-author">
+    <div id="page" class="hfeed">
+    <header id="branding" role="banner">
+    <hgroup>
+      <h1 id="site-title"><span><a href="/" rel="home">Robby Simpson</a></span></h1>
+      <h2 id="site-description">My Musings, Rants, and Sometimes Useful Information</h2>
+    </hgroup>
+    
+    <a href="/"><img src="/assets/images/cropped-Atlanta-Skyline.jpg" alt="Robby Simpson" width="1000" height="287"></a>
+    
+    <nav id="access" role="navigation">
+  <div>
+  <ul id="menu-menu-1" class="menu">
+  
+    <li class="menu-item menu-item-object-custom menu-item-home"><a href="/">home</a></li>
+  
+    <li class="menu-item menu-item-object-page"><a href="/publications.html">publications</a></li>
+  
+    <li class="menu-item menu-item-object-page"><a href="/presentations.html">presentations</a></li>
+  
+    <li class="menu-item menu-item-object-page"><a href="/about.html">about me</a></li>
+  
+    <li class="menu-item menu-item-object-page"><a href="/deuterium/index.html">Deuterium</a></li>
+  
+  </ul>
+  </div>
+</nav>
+
+    </header>
+    <div id="main">
+    <div id="primary">
+    <div id="content" role="main">
+    <article class="post hentry">
+<header class="entry-header">
+<h1 class="entry-title">Microcontroller-Controlled LiPo Protection Circuit</h1>
+<div class="entry-meta">
+<span class="sep">Posted on </span><time class="entry-date">Mar 08, 2021</time>
+</div><!-- .entry-meta -->
+</header><!-- .entry-header -->
+
+<div class="entry-content">
+<p>Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery.</p>
+
+<p>I’ll also be the first to admit that batteries, particularly LiPos, are not my strong suit and kinda freak me out. I guess I’ve watched one too many YouTube videos….</p>
+
+<p>I present here my design for a LiPo undervoltage detection and protection circuit, controlled by a microcontroller (μC). I take no responsibility for any issues, so if you decide to use it, you do so at your own risk. And I certainly welcome feedback: you can find me on <a href="https://twitter.com/robbotic">Twitter @RobBotic</a>.</p>
+
+<p>I did look for COTS solutions, but unfortunately none that I could find would leave the decision making to a μC. And who can pass up a good learning opportunity?!?</p>
+
+<p>Here are my goals and requirements for this circuit:</p>
+<ul>
+  <li>Reusable design for many projects.</li>
+  <li>Works with <a href="https://hobbyking.com/en_us/turnigy-5000mah-3s-20c-lipo-pack-xt-90.html">my LiPo battery</a>, which is a 3S (~9.6 – ~12.6V) 5000mAh 20C pack (~100A), but oddly has an XT60 connector, which limits it to 60A. Plenty for me though….</li>
+  <li>Provides undervoltage protection, as these batteries should not be discharged below a certain level. Further, I’d prefer that the circuit completely disconnect, to prevent additional current drain. That way, if I do not unplug the battery right away, it is less of an issue (many protection circuits simply use transistors to disconnect the battery, which still has some current drain).</li>
+  <li>Reverse polarity protection (though with an XT60 connector it will be quite difficult to plug in incorrectly).</li>
+  <li>μC-controlled disconnect. Given one of my projects is a self-balancing robot, it needs to perform a shutdown sequence (put out a kickstand) prior to disconnecting the battery so that it does not fall on its face. Ideally this will work with the μC or single board computer of your choice, such as an <a href="https://www.arduino.cc/">Arduino</a> or <a href="https://www.raspberrypi.org/">Raspberry Pi</a>.</li>
+  <li>Largely failsafe. In the event of a short, a μC crash, etc., I’d like the battery to be disconnected.</li>
+</ul>
+
+<p>To operate, a user presses a START button (<strong>PBSW1</strong> below), which will power the μC. The μC then samples a voltage divider and determines whether to close a relay. The μC will enter a shutdown sequence (and eventually open the relay / stop powering the relay coil) should the voltage level drop enough in the voltage divider or should a STOP button (<strong>PBSW2</strong> below) be pressed.</p>
+
+<p>And this is the resulting circuit, both hand drawn and created in <a href="https://www.autodesk.com/products/eagle/overview">EAGLE</a>:</p>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+	<a href="/assets/images/lipo_protect_hand_drawn.png"><img src="/assets/images/lipo_protect_hand_drawn.png" alt="LiPo Protection Circuit Hand Drawn" /></a>
+	<figcaption>Hand Drawn Circuit Diagram</figcaption>
+</figure>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+	<a href="/assets/images/lipo_protect_eagle.png"><img src="/assets/images/lipo_protect_eagle.png" alt="LiPo Protection Circuit created in EAGLE" /></a>
+	<figcaption>EAGLE Circuit Diagram</figcaption>
+</figure>
+
+<dl>
+  <dt>BEC</dt>
+  <dd>This is simply a buck converter / voltage regulator. It turns out that the RC world calls them BECs (or SBECs or UBECs) and has a pretty good range of robust pieces available. I grabbed <a href="https://hobbyking.com/en_us/turnigy-8-15a-ubec-for-lipoly.html">this Turnigy UBEC</a>. It is probably overkill at 8A, but I may need some servos on the 5V side.</dd>
+  <dt>Fuse</dt>
+  <dd>I went with a 60A automotive fuse and soldered on XT60 connectors.</dd>
+  <dt>Relay</dt>
+  <dd>Once again, I went down the automotive route and used an automotive relay capable of handling a current in excess of 60A. This relay is closed to enable the battery to power both the μC as well as the load.</dd>
+  <dt>PBSW1</dt>
+  <dd>Momentary switch (normally open) to start the circuit. This switch was chosen to handle the current drawn by the μC, etc., but not the load.</dd>
+  <dt>PBSW2</dt>
+  <dd>Momentary switch (normally closed) to stop the circuit. The μC monitors this switch for a user request to start the shutdown sequence.</dd>
+  <dt>R1 and R2</dt>
+  <dd>Voltage divider. The values were chosen to drop the 3S LiPo voltage down to a reasonable level for a 3.3V analog input on the μC. The μC monitors this voltage and starts a shutdown sequence when the voltage falls below a threshold. Similarly, the μC will only close the relay if the voltage is above a (slightly higher for hysteresis) threshold.</dd>
+  <dt>R3</dt>
+  <dd>Pulldown resistor.</dd>
+  <dt>R4</dt>
+  <dd>I’ve read that this resistor may not be necessary with a MOSFET, but better safe than sorry.</dd>
+  <dt>D1</dt>
+  <dd>Reverse polarity protection, conveniently with the same voltage drop as <strong>D2</strong>. Note that I only need reverse polarity protection here, as the circuit is always initially powered on this side.</dd>
+  <dt>D2</dt>
+  <dd>Protects <strong>PBSW1</strong> from the load current. Thus, the load is only powered via the relay and not when <strong>PBSW1</strong> is pressed.</dd>
+  <dt>D3</dt>
+  <dd>Flyback diode.</dd>
+  <dt>Q1</dt>
+  <dd>N-channel MOSFET. I went with a logic-level MOSFET instead of the more common BJT to minimize the current, as <strong>Q1</strong> is always energized while the relay is closed. The μC outputs to <strong>Q1</strong> to close the relay / power the relay coil, as the μC itself cannot provide the current required to close the relay. Note that I went with a <a href="https://www.onsemi.com/pub/Collateral/BS270-D.PDF">BS270</a> here, but will likely reevaluate that decision in the near future, as the BS270 works well for 5V logic, but not 3.3V logic.</dd>
+</dl>
+
+<p>And here is the resulting make, complete with my not-so-great soldering skills and a 3D-printed box (printed with my beloved <a href="https://www.prusa3d.com/">Prusa I3 MK3S</a>):</p>
+
+<figure style="text-align:center;font-style:italic;margin:0;border:1px solid #000;padding-top:10px">
+  <figure style="display:inline-block;margin:0">
+    <a href="/assets/images/lipo_protect_perf_top.jpg"><img src="/assets/images/lipo_protect_perf_top.jpg" alt="LiPo Protection Circuit Perfboard Top" /></a>
+    <figcaption>Top</figcaption>
+  </figure>
+  <figure style="display:inline-block;margin:0">
+    <a href="/assets/images/lipo_protect_perf_bottom.jpg"><img src="/assets/images/lipo_protect_perf_bottom.jpg" alt="LiPo Protection Circuit Perfboard Bottom" /></a>
+    <figcaption>Bottom</figcaption>
+  </figure>
+  <figcaption>LiPo Protection Circuit on Perfboard</figcaption>
+</figure>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+  <a href="/assets/images/lipo_protect_test.jpg"><img src="/assets/images/lipo_protect_test.jpg" alt="LiPo Protection Circuit Testing" /></a>
+  <figcaption>Testing</figcaption>
+</figure>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+  <a href="/assets/images/lipo_protect_box1.jpg"><img src="/assets/images/lipo_protect_box1.jpg" alt="LiPo Protection Circuit 3D Printed Box 1" /></a>
+  <figcaption>3D Printed Container</figcaption>
+</figure>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+  <a href="/assets/images/lipo_protect_box2.jpg"><img src="/assets/images/lipo_protect_box2.jpg" alt="LiPo Protection Circuit 3D Printed Box 2" /></a>
+  <figcaption>Fully Assembled</figcaption>
+</figure>
+
+<figure style="text-align:center;font-style:italic;border:1px solid #000;padding-top:10px">
+  <a href="/assets/images/lipo_protect_final.jpg"><img src="/assets/images/lipo_protect_final.jpg" alt="LiPo Protection Circuit Assembled on Robot" /></a>
+  <figcaption>LiPo Protection Circuit Assembled on Robot</figcaption>
+</figure>
+
+<p><a href="https://twitter.com/robbotic">Let me know what you think.</a></p>
+
+</div><!-- .entry-content -->
+<footer class="entry-meta">
+</footer><!-- .entry-meta -->
+</article>
+
+    </div><!-- #content -->
+    </div><!-- #primary -->
+    </div><!-- #main -->
+    <footer id="colophon" role="contentinfo">
+    <div id="site-generator">
+      <p><b>Disclaimer:</b> The views and opinions expressed herein are
+solely my own and do not necessarily reflect those of my employer, their
+ employees, partners, or any organization with which I am affiliated.</p>
+      <p>Copyright © 2021 Robby Simpson</p>
+    </div>
+    </footer>
+    </div><!-- #page -->
+  </body>
+</html>

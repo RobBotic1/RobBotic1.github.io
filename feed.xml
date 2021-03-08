@@ -1,4 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2020-09-25T16:25:07-04:00</updated><id>/feed.xml</id><title type="html">Robby Simpson</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Still Here, Now with Jekyll and GitHub!</title><link href="/2019/11/25/still-here-now-with-jekyll-and-github.html" rel="alternate" type="text/html" title="Still Here, Now with Jekyll and GitHub!" /><published>2019-11-25T00:00:00-05:00</published><updated>2019-11-25T00:00:00-05:00</updated><id>/2019/11/25/still-here-now-with-jekyll-and-github</id><content type="html" xml:base="/2019/11/25/still-here-now-with-jekyll-and-github.html">&lt;p&gt;So, obviously I have not been good at updating my website / blogging. And I’m guessing I am not alone.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-03-08T09:48:57-05:00</updated><id>/feed.xml</id><title type="html">Robby Simpson</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Microcontroller-Controlled LiPo Protection Circuit</title><link href="/2021/03/08/lipo-protection-circuit.html" rel="alternate" type="text/html" title="Microcontroller-Controlled LiPo Protection Circuit" /><published>2021-03-08T00:00:00-05:00</published><updated>2021-03-08T00:00:00-05:00</updated><id>/2021/03/08/lipo-protection-circuit</id><content type="html" xml:base="/2021/03/08/lipo-protection-circuit.html">&lt;p&gt;Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery.&lt;/p&gt;
+
+&lt;p&gt;I’ll also be the first to admit that batteries, particularly LiPos, are not my strong suit and kinda freak me out. I guess I’ve watched one too many YouTube videos….&lt;/p&gt;
+
+&lt;p&gt;I present here my design for a LiPo undervoltage detection and protection circuit, controlled by a microcontroller (μC). I take no responsibility for any issues, so if you decide to use it, you do so at your own risk. And I certainly welcome feedback: you can find me on &lt;a href=&quot;https://twitter.com/robbotic&quot;&gt;Twitter @RobBotic&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I did look for COTS solutions, but unfortunately none that I could find would leave the decision making to a μC. And who can pass up a good learning opportunity?!?&lt;/p&gt;
+
+&lt;p&gt;Here are my goals and requirements for this circuit:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Reusable design for many projects.&lt;/li&gt;
+  &lt;li&gt;Works with &lt;a href=&quot;https://hobbyking.com/en_us/turnigy-5000mah-3s-20c-lipo-pack-xt-90.html&quot;&gt;my LiPo battery&lt;/a&gt;, which is a 3S (~9.6 – ~12.6V) 5000mAh 20C pack (~100A), but oddly has an XT60 connector, which limits it to 60A. Plenty for me though….&lt;/li&gt;
+  &lt;li&gt;Provides undervoltage protection, as these batteries should not be discharged below a certain level. Further, I’d prefer that the circuit completely disconnect, to prevent additional current drain. That way, if I do not unplug the battery right away, it is less of an issue (many protection circuits simply use transistors to disconnect the battery, which still has some current drain).&lt;/li&gt;
+  &lt;li&gt;Reverse polarity protection (though with an XT60 connector it will be quite difficult to plug in incorrectly).&lt;/li&gt;
+  &lt;li&gt;μC-controlled disconnect. Given one of my projects is a self-balancing robot, it needs to perform a shutdown sequence (put out a kickstand) prior to disconnecting the battery so that it does not fall on its face. Ideally this will work with the μC or single board computer of your choice, such as an &lt;a href=&quot;https://www.arduino.cc/&quot;&gt;Arduino&lt;/a&gt; or &lt;a href=&quot;https://www.raspberrypi.org/&quot;&gt;Raspberry Pi&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Largely failsafe. In the event of a short, a μC crash, etc., I’d like the battery to be disconnected.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To operate, a user presses a START button (&lt;strong&gt;PBSW1&lt;/strong&gt; below), which will power the μC. The μC then samples a voltage divider and determines whether to close a relay. The μC will enter a shutdown sequence (and eventually open the relay / stop powering the relay coil) should the voltage level drop enough in the voltage divider or should a STOP button (&lt;strong&gt;PBSW2&lt;/strong&gt; below) be pressed.&lt;/p&gt;
+
+&lt;p&gt;And this is the resulting circuit, both hand drawn and created in &lt;a href=&quot;https://www.autodesk.com/products/eagle/overview&quot;&gt;EAGLE&lt;/a&gt;:&lt;/p&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+	&lt;a href=&quot;/assets/images/lipo_protect_hand_drawn.png&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_hand_drawn.png&quot; alt=&quot;LiPo Protection Circuit Hand Drawn&quot; /&gt;&lt;/a&gt;
+	&lt;figcaption&gt;Hand Drawn Circuit Diagram&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+	&lt;a href=&quot;/assets/images/lipo_protect_eagle.png&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_eagle.png&quot; alt=&quot;LiPo Protection Circuit created in EAGLE&quot; /&gt;&lt;/a&gt;
+	&lt;figcaption&gt;EAGLE Circuit Diagram&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;dl&gt;
+  &lt;dt&gt;BEC&lt;/dt&gt;
+  &lt;dd&gt;This is simply a buck converter / voltage regulator. It turns out that the RC world calls them BECs (or SBECs or UBECs) and has a pretty good range of robust pieces available. I grabbed &lt;a href=&quot;https://hobbyking.com/en_us/turnigy-8-15a-ubec-for-lipoly.html&quot;&gt;this Turnigy UBEC&lt;/a&gt;. It is probably overkill at 8A, but I may need some servos on the 5V side.&lt;/dd&gt;
+  &lt;dt&gt;Fuse&lt;/dt&gt;
+  &lt;dd&gt;I went with a 60A automotive fuse and soldered on XT60 connectors.&lt;/dd&gt;
+  &lt;dt&gt;Relay&lt;/dt&gt;
+  &lt;dd&gt;Once again, I went down the automotive route and used an automotive relay capable of handling a current in excess of 60A. This relay is closed to enable the battery to power both the μC as well as the load.&lt;/dd&gt;
+  &lt;dt&gt;PBSW1&lt;/dt&gt;
+  &lt;dd&gt;Momentary switch (normally open) to start the circuit. This switch was chosen to handle the current drawn by the μC, etc., but not the load.&lt;/dd&gt;
+  &lt;dt&gt;PBSW2&lt;/dt&gt;
+  &lt;dd&gt;Momentary switch (normally closed) to stop the circuit. The μC monitors this switch for a user request to start the shutdown sequence.&lt;/dd&gt;
+  &lt;dt&gt;R1 and R2&lt;/dt&gt;
+  &lt;dd&gt;Voltage divider. The values were chosen to drop the 3S LiPo voltage down to a reasonable level for a 3.3V analog input on the μC. The μC monitors this voltage and starts a shutdown sequence when the voltage falls below a threshold. Similarly, the μC will only close the relay if the voltage is above a (slightly higher for hysteresis) threshold.&lt;/dd&gt;
+  &lt;dt&gt;R3&lt;/dt&gt;
+  &lt;dd&gt;Pulldown resistor.&lt;/dd&gt;
+  &lt;dt&gt;R4&lt;/dt&gt;
+  &lt;dd&gt;I’ve read that this resistor may not be necessary with a MOSFET, but better safe than sorry.&lt;/dd&gt;
+  &lt;dt&gt;D1&lt;/dt&gt;
+  &lt;dd&gt;Reverse polarity protection, conveniently with the same voltage drop as &lt;strong&gt;D2&lt;/strong&gt;. Note that I only need reverse polarity protection here, as the circuit is always initially powered on this side.&lt;/dd&gt;
+  &lt;dt&gt;D2&lt;/dt&gt;
+  &lt;dd&gt;Protects &lt;strong&gt;PBSW1&lt;/strong&gt; from the load current. Thus, the load is only powered via the relay and not when &lt;strong&gt;PBSW1&lt;/strong&gt; is pressed.&lt;/dd&gt;
+  &lt;dt&gt;D3&lt;/dt&gt;
+  &lt;dd&gt;Flyback diode.&lt;/dd&gt;
+  &lt;dt&gt;Q1&lt;/dt&gt;
+  &lt;dd&gt;N-channel MOSFET. I went with a logic-level MOSFET instead of the more common BJT to minimize the current, as &lt;strong&gt;Q1&lt;/strong&gt; is always energized while the relay is closed. The μC outputs to &lt;strong&gt;Q1&lt;/strong&gt; to close the relay / power the relay coil, as the μC itself cannot provide the current required to close the relay. Note that I went with a &lt;a href=&quot;https://www.onsemi.com/pub/Collateral/BS270-D.PDF&quot;&gt;BS270&lt;/a&gt; here, but will likely reevaluate that decision in the near future, as the BS270 works well for 5V logic, but not 3.3V logic.&lt;/dd&gt;
+&lt;/dl&gt;
+
+&lt;p&gt;And here is the resulting make, complete with my not-so-great soldering skills and a 3D-printed box (printed with my beloved &lt;a href=&quot;https://www.prusa3d.com/&quot;&gt;Prusa I3 MK3S&lt;/a&gt;):&lt;/p&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;margin:0;border:1px solid #000;padding-top:10px&quot;&gt;
+  &lt;figure style=&quot;display:inline-block;margin:0&quot;&gt;
+    &lt;a href=&quot;/assets/images/lipo_protect_perf_top.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_perf_top.jpg&quot; alt=&quot;LiPo Protection Circuit Perfboard Top&quot; /&gt;&lt;/a&gt;
+    &lt;figcaption&gt;Top&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  &lt;figure style=&quot;display:inline-block;margin:0&quot;&gt;
+    &lt;a href=&quot;/assets/images/lipo_protect_perf_bottom.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_perf_bottom.jpg&quot; alt=&quot;LiPo Protection Circuit Perfboard Bottom&quot; /&gt;&lt;/a&gt;
+    &lt;figcaption&gt;Bottom&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  &lt;figcaption&gt;LiPo Protection Circuit on Perfboard&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+  &lt;a href=&quot;/assets/images/lipo_protect_test.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_test.jpg&quot; alt=&quot;LiPo Protection Circuit Testing&quot; /&gt;&lt;/a&gt;
+  &lt;figcaption&gt;Testing&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+  &lt;a href=&quot;/assets/images/lipo_protect_box1.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_box1.jpg&quot; alt=&quot;LiPo Protection Circuit 3D Printed Box 1&quot; /&gt;&lt;/a&gt;
+  &lt;figcaption&gt;3D Printed Container&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+  &lt;a href=&quot;/assets/images/lipo_protect_box2.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_box2.jpg&quot; alt=&quot;LiPo Protection Circuit 3D Printed Box 2&quot; /&gt;&lt;/a&gt;
+  &lt;figcaption&gt;Fully Assembled&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure style=&quot;text-align:center;font-style:italic;border:1px solid #000;padding-top:10px&quot;&gt;
+  &lt;a href=&quot;/assets/images/lipo_protect_final.jpg&quot;&gt;&lt;img src=&quot;/assets/images/lipo_protect_final.jpg&quot; alt=&quot;LiPo Protection Circuit Assembled on Robot&quot; /&gt;&lt;/a&gt;
+  &lt;figcaption&gt;LiPo Protection Circuit Assembled on Robot&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/robbotic&quot;&gt;Let me know what you think.&lt;/a&gt;&lt;/p&gt;</content><author><name>robby</name></author><summary type="html">Finding myself stuck at home more during the pandemic, one hobby I’ve focused on is robotics. Many of my projects run on batteries and some need to intelligently realize that the charge is running low so that they can take shutdown steps prior to disconnecting the battery.</summary></entry><entry><title type="html">Still Here, Now with Jekyll and GitHub!</title><link href="/2019/11/25/still-here-now-with-jekyll-and-github.html" rel="alternate" type="text/html" title="Still Here, Now with Jekyll and GitHub!" /><published>2019-11-25T00:00:00-05:00</published><updated>2019-11-25T00:00:00-05:00</updated><id>/2019/11/25/still-here-now-with-jekyll-and-github</id><content type="html" xml:base="/2019/11/25/still-here-now-with-jekyll-and-github.html">&lt;p&gt;So, obviously I have not been good at updating my website / blogging. And I’m guessing I am not alone.&lt;/p&gt;
 
 &lt;p&gt;BUT, I have been busy.&lt;/p&gt;
 
